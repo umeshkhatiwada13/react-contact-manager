@@ -12,21 +12,17 @@ const ContactList = () => {
     });
 
     useEffect(() => {
-        console.log("State before data fetch ", state);
         async function fetchData() {
             try {
                 setState({ ...state, loading: true })
                 let response = await axios.get('http://localhost:9000/contacts');
                 // let response = await ContactServices.getAllContacts();
+                //passing current state and settign response data to contacts 
                 setState({
                     ...state,
                     loading: false,
                     contacts: response.data
                 })
-                console.log("After fetching data");
-                console.log(response);
-                console.log("state ");
-                console.log(state);
             } catch (e) {
                 setState({
                     ...state,
@@ -39,6 +35,7 @@ const ContactList = () => {
 
     }, []);
 
+    //destructuring the data set into current state from api
     let { loading, contacts, errorMessage } = state;
 
     return (

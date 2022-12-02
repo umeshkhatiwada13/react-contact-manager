@@ -5,4 +5,8 @@ export class ContactServices {
         let dataUrl = `${this.SERVER_URL}/contacts`;
         return axios.get(dataUrl);
     }
+
+    static getContactById(contactId) {
+        return axios.get(`${this.SERVER_URL}/contacts/${contactId}`);
+    }
 }

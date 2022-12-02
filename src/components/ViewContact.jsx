@@ -1,7 +1,46 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import Loader from './Loader';
 
 const ViewContact = () => {
+    let { contactId } = useParams();
+    let [state, setState] = useState({
+        loading: false,
+        contact: {},
+        errorMessage: ''
+    });
+
+    console.log("Contact Id  ", contactId)
+
+    useEffect(() => {
+        async function fetchData() {
+            setState({
+                ...state,
+                loading: true
+            })
+            try {
+                let response = await axios.get(`http://localhost:9000/contacts/${contactId}`);
+                setState({
+                    ...state,
+                    contact: response.data,
+                    loading: false
+                })
+            } catch (e) {
+                setState({
+                    ...state,
+                    errorMessage: e
+                })
+            }
+        }
+
+        fetchData();
+    }, [contactId]);
+
+    console.log("State ", state);
+
+    let { loading, contact, errorMessage } = state;
+
     return (
         <>
             <section className="view-contact-intro p-3">
@@ -14,45 +53,49 @@ const ViewContact = () => {
                     </div>
                 </div>
             </section>
-            <section className="view-contact mt-3">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-4">
-                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80"
-                                alt="Profile" className='img-fluid contact-img' />
+            {loading ? <Loader /> : <>
+                {
+                    Object.keys(contact).length > 0 && <section className="view-contact mt-3">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <img src={contact.photo}
+                                        alt="Profile" className='img-fluid contact-img' />
+                                </div>
+                                <div className="col-md-8">
+                                    <ul className="list-group">
+                                        <li className="list-group-item list-group-item-event">
+                                            Name : <span className="fw-bold">{contact.name}</span>
+                                        </li>
+                                        <li className="list-group-item list-group-item-event">
+                                            Mobile : <span className="fw-bold">{contact.mobile}</span>
+                                        </li>
+                                        <li className="list-group-item list-group-item-event">
+                                            Email : <span className="fw-bold">{contact.email}</span>
+                                        </li>
+                                        <li className="list-group-item list-group-item-event">
+                                            Company : <span className="fw-bold">{contact.company}</span>
+                                        </li>
+                                        <li className="list-group-item list-group-item-event">
+                                            Title : <span className="fw-bold">{contact.title}</span>
+                                        </li>
+                                        <li className="list-group-item list-group-item-event">
+                                            Group : <span className="fw-bold">{contact.groupId}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <Link to={'/contact/list'} className='btn btn-warning'>Back</Link>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-md-8">
-                            <ul className="list-group">
-                                <li className="list-group-item list-group-item-event">
-                                    Name : <span className="fw-bold">Ram</span>
-                                </li>
-                                <li className="list-group-item list-group-item-event">
-                                    Mobile : <span className="fw-bold">1234567890</span>
-                                </li>
-                                <li className="list-group-item list-group-item-event">
-                                    Email : <span className="fw-bold">ram@gmail.com</span>
-                                </li>
-                                <li className="list-group-item list-group-item-event">
-                                    Company : <span className="fw-bold">1234567890</span>
-                                </li>
-                                <li className="list-group-item list-group-item-event">
-                                    Title : <span className="fw-bold">ram@gmail.com</span>
-                                </li>
-                                <li className="list-group-item list-group-item-event">
-                                    Group : <span className="fw-bold">ram@gmail.com</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <Link to={'/contact/list'} className='btn btn-warning'>Back</Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                    </section>
+                }
+            </>}
         </>
     )
 }
 
-export default ViewContact
+export default ViewContact;
