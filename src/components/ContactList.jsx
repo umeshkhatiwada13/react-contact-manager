@@ -1,7 +1,41 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ContactServices } from './services/ContactService';
 
 const ContactList = () => {
+    let [state, setState] = useState({
+        loading: false,
+        contacts: [],
+        errorMessage: ''
+    });
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setState({ ...state, loading: true })
+                let response = await axios.get('http://localhost:9000/contacts');
+                // let response = await ContactServices.getAllContacts();
+                setState({
+                    ...state,
+                    loading: false,
+                    contacts: response.data
+                })
+                console.log(response.data);
+            } catch (e) {
+                setState({
+                    ...state,
+                    loading: false,
+                    errorMessage: e.message
+                })
+            }
+        }
+        fetchData();
+
+    }, []);
+
+    let {loading, contacts , errorMessage} = state;
+
     return (
         <>
             <section className="contact-search p-3">

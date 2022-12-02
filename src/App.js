@@ -2,6 +2,7 @@ import { Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-d
 import AddContact from './components/AddContact';
 import ContactList from './components/ContactList';
 import EditContact from './components/EditContact';
+import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import ViewContact from './components/ViewContact';
 import './styles/index.css';
@@ -10,6 +11,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <Loader />
       <Routes>
         <Route path='/' element={<Navigate to={'/contact/list'} />} />
         <Route path='/contact/list' element={<ContactList />} />
