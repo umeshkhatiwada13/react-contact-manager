@@ -2,13 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Loader from './Loader';
+import { ContactServices } from './services/ContactService';
 
 const ViewContact = () => {
     let { contactId } = useParams();
     let [state, setState] = useState({
         loading: false,
         contact: {},
-        errorMessage: ''
+        errorMessage: '',
+        group: {},
     });
 
     console.log("Contact Id  ", contactId)
@@ -21,10 +23,17 @@ const ViewContact = () => {
             })
             try {
                 let response = await axios.get(`http://localhost:9000/contacts/${contactId}`);
+                console.log("contact is ", response);
+                let groupId = response.data.groupId;
+                console.log("group id ", response.data.groupId);
+                // let groupResponse = await ContactServices.getGroup(response);
+                let groupResponse = await axios.get(`http://localhost:9000/groups/${groupId}`)
+                // console.log("Contact ", response);
                 setState({
                     ...state,
                     contact: response.data,
-                    loading: false
+                    loading: false,
+                    group: groupResponse.data
                 })
             } catch (e) {
                 setState({
@@ -39,7 +48,7 @@ const ViewContact = () => {
 
     console.log("State ", state);
 
-    let { loading, contact, errorMessage } = state;
+    let { loading, contact, errorMessage, group } = state;
 
     return (
         <>
@@ -55,7 +64,8 @@ const ViewContact = () => {
             </section>
             {loading ? <Loader /> : <>
                 {
-                    Object.keys(contact).length > 0 && <section className="view-contact mt-3">
+                    Object.keys(contact).length > 0 &&
+                    <section className="view-contact mt-3">
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-4">
@@ -80,7 +90,7 @@ const ViewContact = () => {
                                             Title : <span className="fw-bold">{contact.title}</span>
                                         </li>
                                         <li className="list-group-item list-group-item-event">
-                                            Group : <span className="fw-bold">{contact.groupId}</span>
+                                            Group : <span className="fw-bold">{group.name}</span>
                                         </li>
                                     </ul>
                                 </div>

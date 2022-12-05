@@ -9,4 +9,13 @@ export class ContactServices {
     static getContactById(contactId) {
         return axios.get(`${this.SERVER_URL}/contacts/${contactId}`);
     }
+
+    static getGroups() {
+        return axios.get(`${this.SERVER_URL}/groups`);
+    }
+
+    static getGroup(contact) {
+        let groupId = contact.groupId;
+        return axios.get(`${this.SERVER_URL}/groups/${groupId}`)
+    }
 }
