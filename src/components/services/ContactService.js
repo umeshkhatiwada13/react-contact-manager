@@ -16,6 +16,10 @@ export class ContactServices {
 
     static getGroup(contact) {
         let groupId = contact.groupId;
-        return axios.get(`${this.SERVER_URL}/groups/${groupId}`)
+        return axios.get(`${this.SERVER_URL}/groups/${groupId}`);
+    }
+
+    static createContact(contact) {
+        return axios.post(`${this.SERVER_URL}/contacts`, contact);
     }
 }
