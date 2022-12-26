@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loader from './Loader';
@@ -43,7 +42,6 @@ const ContactList = () => {
     let deleteContact = async (contactId) => {
         try {
             let response = await ContactServices.deleteContact(contactId);
-            // console.log("Delete response ", response);
             if (response) {
                 setState({ ...state, loading: true })
                 let response = await ContactServices.getAllContacts();
@@ -75,12 +73,9 @@ const ContactList = () => {
 
     let returnData = (text) => {
         let inputText = text ? text : query.text;
-        console.log("Text ", inputText);
         let filteredData = state.contacts.filter(contact => {
-            console.log("data inside loop  ", contact)
             return contact.name.toLowerCase().includes(inputText);
         })
-        console.log("Filtered data ", filteredData);
         setState({
             ...state,
             filteredContacts: filteredData

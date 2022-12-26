@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Loader from './Loader';
-import { ContactServices } from './services/ContactService';
 
 const ViewContact = () => {
     let { contactId } = useParams();
@@ -23,12 +22,9 @@ const ViewContact = () => {
             })
             try {
                 let response = await axios.get(`http://localhost:9000/contacts/${contactId}`);
-                console.log("contact is ", response);
                 let groupId = response.data.groupId;
-                console.log("group id ", response.data.groupId);
                 // let groupResponse = await ContactServices.getGroup(response);
                 let groupResponse = await axios.get(`http://localhost:9000/groups/${groupId}`)
-                // console.log("Contact ", response);
                 setState({
                     ...state,
                     contact: response.data,
@@ -45,8 +41,6 @@ const ViewContact = () => {
 
         fetchData();
     }, [contactId]);
-
-    console.log("State ", state);
 
     let { loading, contact, errorMessage, group } = state;
 
