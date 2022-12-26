@@ -8,8 +8,13 @@ const ContactList = () => {
     let [state, setState] = useState({
         loading: false,
         contacts: [],
+        filteredContacts: [],
         errorMessage: ''
     });
+
+    let [query, setQuery] = useState({
+        text: '',
+    })
 
     useEffect(() => {
         async function fetchData() {
@@ -20,7 +25,8 @@ const ContactList = () => {
                 setState({
                     ...state,
                     loading: false,
-                    contacts: response.data
+                    contacts: response.data,
+                    filteredContacts: response.data,
                 })
             } catch (e) {
                 setState({
@@ -37,7 +43,7 @@ const ContactList = () => {
     let deleteContact = async (contactId) => {
         try {
             let response = await ContactServices.deleteContact(contactId);
-            console.log("Delete response ", response);
+            // console.log("Delete response ", response);
             if (response) {
                 setState({ ...state, loading: true })
                 let response = await ContactServices.getAllContacts();
@@ -45,7 +51,8 @@ const ContactList = () => {
                 setState({
                     ...state,
                     loading: false,
-                    contacts: response.data
+                    contacts: response.data,
+                    filteredContacts: response.data
                 })
             }
         } catch (error) {
@@ -57,11 +64,35 @@ const ContactList = () => {
         }
     }
 
+    // set user-input in search box to query.text , which keyword is used later to search 
+    let updateSearchText = (e) => {
+        setQuery({
+            ...query,
+            text: e.target.value
+        })
+        // returnData(e.target.value);
+    }
+
+    let returnData = (text) => {
+        let inputText = text ? text : query.text;
+        console.log("Text ", inputText);
+        let filteredData = state.contacts.filter(contact => {
+            console.log("data inside loop  ", contact)
+            return contact.name.toLowerCase().includes(inputText);
+        })
+        console.log("Filtered data ", filteredData);
+        setState({
+            ...state,
+            filteredContacts: filteredData
+        })
+    }
+
     //destructuring the data set into current state from api
-    let { loading, contacts, errorMessage } = state;
+    let { loading, contacts, filteredContacts, errorMessage } = state;
 
     return (
         <>
+            <pre>{JSON.stringify(query)}</pre>
             <section className="contact-search p-3">
                 <div className="container">
                     <div className="grid">
@@ -80,12 +111,12 @@ const ContactList = () => {
                                 <form className='row'>
                                     <div className="col">
                                         <div className="mb-2">
-                                            <input type="text" className="form-control" placeholder='Search Name' />
+                                            <input type="text" value={query.text} onChange={updateSearchText} className="form-control" placeholder='Search Name' />
                                         </div>
                                     </div>
                                     <div className="col">
                                         <div className="mb-2">
-                                            <input type="text" className="btn btn-outline-dark" placeholder='Search' />
+                                            <button type='button' className="btn btn-outline-dark" onClick={() => returnData()}> Search </button>
                                         </div>
                                     </div>
                                 </form>
@@ -101,8 +132,7 @@ const ContactList = () => {
                             <div className="container">
                                 <div className="row">
                                     {
-                                        contacts.length > 0 && contacts.map(c => {
-                                            console.log("Contact ", c);
+                                        filteredContacts.length > 0 && filteredContacts.map(c => {
                                             return (
                                                 <div className="col-md-6 mt-2" key={c.id}>
                                                     <div className="card">
@@ -153,4 +183,4 @@ const ContactList = () => {
     )
 }
 
-export default ContactList
+export default ContactList;

@@ -82,8 +82,9 @@ const EditContact = () => {
     let submitForm = async (event) => {
         event.preventDefault();
         try {
-            let response = await ContactServices.updateContact(contact, contactId);
-            if (response) {
+             let response = await ContactServices.updateContact(contact, contactId);
+ 
+             if (response) {
                 navigate('/contact/list', true);
             } else {
 
