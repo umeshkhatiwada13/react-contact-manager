@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ContactList from './ContactList';
 import { ContactServices } from './services/ContactService';
 
 const AddContact = () => {

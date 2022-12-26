@@ -22,4 +22,8 @@ export class ContactServices {
     static createContact(contact) {
         return axios.post(`${this.SERVER_URL}/contacts`, contact);
     }
+
+    static updateContact(contact, contactId) {
+        return axios.put(`${this.SERVER_URL}/contacts/${contactId}`, contact);
+    }
 }
