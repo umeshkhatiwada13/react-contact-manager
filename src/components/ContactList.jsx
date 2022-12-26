@@ -15,8 +15,7 @@ const ContactList = () => {
         async function fetchData() {
             try {
                 setState({ ...state, loading: true })
-                let response = await axios.get('http://localhost:9000/contacts');
-                // let response = await ContactServices.getAllContacts();
+                let response = await ContactServices.getAllContacts();
                 //passing current state and settign response data to contacts 
                 setState({
                     ...state,
@@ -34,6 +33,29 @@ const ContactList = () => {
         fetchData();
 
     }, []);
+
+    let deleteContact = async (contactId) => {
+        try {
+            let response = await ContactServices.deleteContact(contactId);
+            console.log("Delete response ", response);
+            if (response) {
+                setState({ ...state, loading: true })
+                let response = await ContactServices.getAllContacts();
+                //passing current state and settign response data to contacts 
+                setState({
+                    ...state,
+                    loading: false,
+                    contacts: response.data
+                })
+            }
+        } catch (error) {
+            console.log(error.message);
+            setState({
+                ...state,
+                errorMessage: error.message,
+            })
+        }
+    }
 
     //destructuring the data set into current state from api
     let { loading, contacts, errorMessage } = state;
@@ -110,7 +132,7 @@ const ContactList = () => {
                                                                     <Link to={`/contact/edit/${c.id}`} className='btn btn-primary my-1'>
                                                                         <i className='fa fa-pen' />
                                                                     </Link>
-                                                                    <button className='btn btn-danger my-1'>
+                                                                    <button className='btn btn-danger my-1' onClick={() => deleteContact(c.id)}>
                                                                         <i className='fa fa-trash' />
                                                                     </button>
                                                                 </div>

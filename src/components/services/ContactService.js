@@ -26,4 +26,8 @@ export class ContactServices {
     static updateContact(contact, contactId) {
         return axios.put(`${this.SERVER_URL}/contacts/${contactId}`, contact);
     }
+
+    static deleteContact(contactId) {
+        return axios.delete(`${this.SERVER_URL}/contacts/${contactId}`);
+    }
 }

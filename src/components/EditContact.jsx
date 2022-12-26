@@ -83,7 +83,6 @@ const EditContact = () => {
         event.preventDefault();
         try {
             let response = await ContactServices.updateContact(contact, contactId);
-
             if (response) {
                 navigate('/contact/list', true);
             } else {
