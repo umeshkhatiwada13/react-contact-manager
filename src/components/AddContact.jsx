@@ -59,7 +59,7 @@ const AddContact = () => {
     let { loading, contact, groups, errorMessage } = state;
     return (
         <>
-            <pre>{JSON.stringify(state.contact)}</pre>
+            {/* <pre>{JSON.stringify(state.contact)}</pre> */}
             <section className="add-contact">
                 <div className="container">
                     <div className="row">

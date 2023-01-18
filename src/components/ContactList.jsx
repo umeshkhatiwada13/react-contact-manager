@@ -87,7 +87,7 @@ const ContactList = () => {
 
     return (
         <>
-            <pre>{JSON.stringify(query)}</pre>
+            {/* <pre>{JSON.stringify(query)}</pre> */}
             <section className="contact-search p-3">
                 <div className="container">
                     <div className="grid">

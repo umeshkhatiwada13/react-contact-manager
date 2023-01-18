@@ -108,7 +108,7 @@ const EditContact = () => {
                                 <div className="col">
                                     <p className="h3 text-success fw-bold">Edit Contact</p>
                                     <p className="fst-italic">Lets do it</p>
-                                    <pre>{JSON.stringify(contact)}</pre>
+                                    {/* <pre>{JSON.stringify(contact)}</pre> */}
                                 </div>
                             </div>
                             <div className="row">
